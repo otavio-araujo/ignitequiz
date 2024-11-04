@@ -10,6 +10,8 @@ import { THEME } from "../../styles/theme"
 import { styles } from "./styles"
 import { useEffect } from "react"
 
+const PressableAnimated = Animated.createAnimatedComponent(Pressable)
+
 const TYPE_COLORS = {
   EASY: THEME.COLORS.BRAND_LIGHT,
   HARD: THEME.COLORS.DANGER_LIGHT,
@@ -67,18 +69,15 @@ export function Level({
   }, [isChecked])
 
   return (
-    <Pressable onPressIn={onPressIn} onPressOut={onPressOut} {...rest}>
-      <Animated.View
-        style={[
-          styles.container,
-          { borderColor: COLOR },
-          animatedContainerStyle,
-        ]}
-      >
-        <Animated.Text style={[styles.title, animatedTextStyle]}>
-          {title}
-        </Animated.Text>
-      </Animated.View>
-    </Pressable>
+    <PressableAnimated
+      onPressIn={onPressIn}
+      onPressOut={onPressOut}
+      style={[styles.container, { borderColor: COLOR }, animatedContainerStyle]}
+      {...rest}
+    >
+      <Animated.Text style={[styles.title, animatedTextStyle]}>
+        {title}
+      </Animated.Text>
+    </PressableAnimated>
   )
 }
