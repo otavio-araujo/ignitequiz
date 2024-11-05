@@ -22,6 +22,7 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSequence,
+  withSpring,
   withTiming,
 } from "react-native-reanimated"
 import { GestureDetector, Gesture } from "react-native-gesture-handler"
@@ -167,9 +168,13 @@ export function Quiz() {
     }
   })
 
-  const onPan = Gesture.Pan().onUpdate((event) => {
-    cardPosition.value = event.translationX
-  })
+  const onPan = Gesture.Pan()
+    .onUpdate((event) => {
+      cardPosition.value = event.translationX
+    })
+    .onEnd(() => {
+      cardPosition.value = withSpring(0)
+    })
 
   useEffect(() => {
     const quizSelected = QUIZ.filter((item) => item.id === id)[0]
