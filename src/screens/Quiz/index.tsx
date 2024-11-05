@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Alert, ScrollView, View } from "react-native"
+import { Alert, ScrollView, Text, View } from "react-native"
 
 import { useNavigation, useRoute } from "@react-navigation/native"
 
@@ -23,6 +23,8 @@ import Animated, {
   withSequence,
   withTiming,
 } from "react-native-reanimated"
+import { ProgressBar } from "../../components/ProgressBar"
+import { THEME } from "../../styles/theme"
 
 interface Params {
   id: string
@@ -133,6 +135,15 @@ export function Quiz() {
       scrollY.value = event.contentOffset.y
     },
   })
+  const fixedProgressBarStyles = useAnimatedStyle(() => {
+    return {
+      position: "absolute",
+      paddingTop: 50,
+      backgroundColor: THEME.COLORS.GREY_500,
+      width: "110%",
+      left: "-5%",
+    }
+  })
 
   useEffect(() => {
     const quizSelected = QUIZ.filter((item) => item.id === id)[0]
@@ -152,6 +163,14 @@ export function Quiz() {
 
   return (
     <View style={styles.container}>
+      <Animated.View style={fixedProgressBarStyles}>
+        <Text style={styles.title}>{quiz.title}</Text>
+        <ProgressBar
+          total={quiz.questions.length}
+          current={currentQuestion + 1}
+        />
+      </Animated.View>
+
       <Animated.ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.question}
