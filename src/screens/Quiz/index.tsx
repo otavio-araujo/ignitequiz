@@ -18,6 +18,7 @@ import Animated, {
   Extrapolate,
   interpolate,
   log,
+  runOnJS,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
@@ -36,6 +37,7 @@ interface Params {
 type QuizProps = (typeof QUIZ)[0]
 
 const CARD_INCLINATION_FACTOR = 10
+const CARD_SKYP_AREA = -200
 
 export function Quiz() {
   const [points, setPoints] = useState(0)
@@ -188,8 +190,12 @@ export function Quiz() {
         cardPosition.value = event.translationX
       }
     })
-    .onEnd(() => {
+    .onEnd((event) => {
       cardPosition.value = withSpring(0)
+
+      if (event.translationX < CARD_SKYP_AREA) {
+        runOnJS(handleSkipConfirm)()
+      }
     })
 
   useEffect(() => {
